@@ -49,14 +49,7 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
     const id = decodeURIComponent((request.params as { id: string }).id);
 
     try {
-      const res = redis ? await cache.fetch(
-        redis as Redis,
-        `${redisPrefix}info;${id}`,
-        async () => await gogoanime
-        .fetchAnimeInfo(id)
-        .catch((err) => reply.status(404).send({ message: err })),
-        redisCacheTime,
-      ) : gogoanime
+      const res = await gogoanime
       .fetchAnimeInfo(id)
       .catch((err) => reply.status(404).send({ message: err }));
 
